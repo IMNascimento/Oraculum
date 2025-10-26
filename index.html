@@ -2,12 +2,150 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/oraculum_logo_icone.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OraculumAI</title>
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Canonical -->
+    <!-- TODO: substitua pelo domínio final do Oraculum -->
+    <link rel="canonical" href="https://oraculum.sophiamind.com/" />
+
+    <!-- Primary Meta -->
+    <title>OraculumAI — Análise Inteligente de Código com IA</title>
+    <meta name="description" content="OraculumAI analisa seu código e entrega sugestões profissionais de melhoria: legibilidade, arquitetura, complexidade, testes e boas práticas. Projeto desenvolvido com apoio da SophiaMind e SophiaLabs." />
+    <meta name="keywords" content="Oraculum, OraculumAI, análise de código, code review, qualidade de software, melhores práticas, refatoração, React, Vite, IA, SophiaMind, SophiaLabs" />
+    <meta name="author" content="OraculumAI - SophiaMind - SophiaLabs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <!-- TODO: troque para a URL final -->
+    <meta property="og:url" content="https://oraculum.sophiamind.com/" />
+    <meta property="og:site_name" content="OraculumAI" />
+    <meta property="og:title" content="OraculumAI — Análise Inteligente de Código com IA" />
+    <meta property="og:description" content="Envie seu código e receba insights acionáveis de arquitetura, legibilidade e testes. Com tecnologia SophiaMind & SophiaLabs." />
+    <!-- TODO: aponte para uma imagem 1200x630 (JPEG/PNG) hospedada -->
+    <meta property="og:image" content="https://oraculum.sophiamind.com/og/oraculum-og.png" />
+    <meta property="og:image:alt" content="OraculumAI — análise de código com IA" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- TODO: troque para a URL final -->
+    <meta name="twitter:url" content="https://oraculum.sophiamind.com/" />
+    <meta name="twitter:title" content="OraculumAI — Análise Inteligente de Código com IA" />
+    <meta name="twitter:description" content="Code review automatizado com insights de arquitetura e qualidade. Powered by SophiaMind & SophiaLabs." />
+    <!-- TODO: mesma imagem do OG -->
+    <meta name="twitter:image" content="https://oraculum.sophiamind.com/og/oraculum-og.png" />
+
+    <!-- Hreflang (se for multi-idioma) -->
+    <!-- TODO: ajuste as URLs/idiomas conforme sua estrutura -->
+    <link rel="alternate" href="https://oraculum.sophiamind.com/" hreflang="pt-BR" />
+    <link rel="alternate" href="https://oraculum.sophiamind.com/en/" hreflang="en-US" />
+    <link rel="alternate" href="https://oraculum.sophiamind.com/" hreflang="x-default" />
+
+    <!-- PWA / Icons -->
+    <link rel="icon" type="image/png" href="/oraculum_logo_icone.png" />
+    <!-- TODO: inclua se tiver manifest -->
+    <!-- <link rel="manifest" href="/site.webmanifest" /> -->
+    <!-- TODO: inclua Apple Touch se tiver -->
+    <!-- <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" /> -->
+
+    <!-- Preconnect (ex.: fontes/CDNs que você usa) -->
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> -->
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
+
+    <!-- Structured Data: WebApplication + Organizations (SophiaMind & SophiaLabs) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "OraculumAI",
+      "url": "https://oraculum.sophiamind.com/",
+      "applicationCategory": "DeveloperApplication",
+      "description": "OraculumAI analisa seu código-fonte e sugere melhorias de arquitetura, legibilidade, complexidade, testes e conformidade.",
+      "inLanguage": "pt-BR",
+      "operatingSystem": "Windows, macOS, Linux",
+      "creator": {
+        "@type": "Organization",
+        "name": "SophiaMind",
+        "url": "https://sophiamind.com.br/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SophiaLabs",
+        "url": "https://sophialabs.com.br/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: Organizations separadas (opcional, reforça vínculos) -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"Organization",
+      "name":"SophiaMind",
+      "url":"https://sophiamind.com.br/",
+      "sameAs":[
+        "https://www.linkedin.com/company/sophiamind" 
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@type":"Organization",
+      "name":"SophiaLabs",
+      "url":"https://sophialabs.com.br/",
+      "sameAs":[
+        "https://www.linkedin.com/company/sophialabs"
+      ]
+    }
+    </script>
+
+    <!-- Política / jurídico (útil para SEO e confiança) -->
+    <!-- TODO: crie páginas reais e aponte para elas -->
+    <!-- <link rel="privacy-policy" href="/privacidade" />
+    <link rel="terms-of-service" href="/termos" /> -->
+
+    <!-- Título curto para abas do iOS/Android -->
+    <meta name="apple-mobile-web-app-title" content="OraculumAI" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <!-- Link institucional (visível ao crawler e a usuários) -->
+    <footer style="position: fixed; left: -9999px; visibility: hidden;">
+      Desenvolvido por
+      <a href="https://imnascimento.github.io/Portifolio/" rel="noopener nofollow">Igor Nascimento</a>
+      Projeto desenvolvido com apoio de
+      <a href="https://sophialabs.example.com.br/" rel="noopener nofollow">SophiaLabs</a>
+      e
+      <a href="https://sophiamind.example.com/" rel="noopener nofollow">SophiaMind</a>.
+    </footer>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

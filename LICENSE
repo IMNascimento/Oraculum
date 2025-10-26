@@ -1,4 +1,4 @@
-                    GNU GENERAL PUBLIC LICENSE
+GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -672,3 +672,32 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+---------------------------------------------------------------------
+ADDITIONAL TERMS UNDER GPLv3 §7 (Attribution / Legal Notices Preservation)
+
+Attribution Notice Preservation.
+For the parts of the Program originally authored by the copyright holder(s)
+listed in the accompanying NOTICE file (“Project Materials”), any interactive
+user interface of the Program or of a work based on the Program must display
+an Appropriate Legal Notice as defined in GPLv3, including the following
+attribution, in the footer or an equivalently prominent location:
+
+“Oraculum IA — desenvolvido com apoio de SophiaMind e SophiaLabs”
+
+with functional hyperlinks to the official pages indicated in the NOTICE file.
+This notice may be styled to match the product’s theme, but it must not be
+removed or relegated to a location of difficult visibility when an equivalent
+interface in the original Program displayed it prominently.
+
+This requirement does not restrict modification of the code nor impose
+obligations beyond the GPLv3; it is a condition of preservation of legal
+notices and attribution as permitted by GPLv3 §7(b). For distributions without
+an interactive user interface (e.g., headless execution, libraries, or CLIs),
+the attribution may appear in an “about” screen, the output of a `--version`
+command, package documentation, or a README file, in a reasonable manner.
+
+Trademark/Brand.
+Use of the names and logos “SophiaMind” and “SophiaLabs” remains subject to
+applicable trademark law; this term does not grant any trademark license beyond
+the use necessary for the attribution above.

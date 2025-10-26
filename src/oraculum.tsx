@@ -33,6 +33,10 @@ const TRANSLATIONS = {
     aiProvider: 'Provedor de IA',
     claude: 'Claude (API Anthropic)',
     ollama: 'Ollama (Local)',
+    openai: 'ChatGPT (OpenAI)',
+    openaiBaseUrl: 'Base URL do OpenAI',
+    openaiModel: 'Modelo do OpenAI',
+    openaiNote: 'Use um proxy no servidor para não expor sua chave em produção.',
     ollamaEndpoint: 'Endpoint do Ollama',
     ollamaModel: 'Modelo do Ollama',
     configuration: 'Configuração',
@@ -43,6 +47,63 @@ const TRANSLATIONS = {
 const locale = 'pt-BR';
 const _TRANSLATIONS: any = TRANSLATIONS;
 const t = (key: string) => _TRANSLATIONS[locale]?.[key] || _TRANSLATIONS['pt-BR']?.[key] || key;
+
+/** ===== Footer component ===== */
+function Footer() {
+  const year = new Date().getFullYear();
+  return (
+    <footer className="border-t border-gray-800 bg-gray-900/70">
+      <div className="max-w-4xl mx-auto px-6 py-6 text-sm text-gray-400 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-2">
+          <img src="/oraculum_logo_icone.png" alt="Oraculum Logo" className="w-5 h-5 opacity-80" />
+          <span>© {year} Oraculum IA. Todos os direitos reservados.</span>
+        </div>
+
+        <nav className="flex flex-wrap items-center gap-4">
+          <a
+            href="https://imnascimento.github.io/Portifolio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gray-200 transition-colors"
+            aria-label="Igor Nascimento (abre em nova aba)"
+          >
+            Igor Nascimento
+          </a>
+          <a
+            href="https://sophiamind.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gray-200 transition-colors"
+            aria-label="SophiaMind (abre em nova aba)"
+          >
+            SophiaMind
+          </a>
+          <a
+            href="https://sophialabs.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gray-200 transition-colors"
+            aria-label="SophiaLabs (abre em nova aba)"
+          >
+            SophiaLabs
+          </a>
+          <a
+            href="/privacidade"
+            className="hover:text-gray-200 transition-colors"
+          >
+            Privacidade
+          </a>
+          <a
+            href="/termos"
+            className="hover:text-gray-200 transition-colors"
+          >
+            Termos
+          </a>
+        </nav>
+      </div>
+    </footer>
+  );
+}
 
 export default function CodingCoach() {
   const [file, setFile] = useState<File | null>(null);
@@ -56,6 +117,9 @@ export default function CodingCoach() {
   const [aiProvider, setAiProvider] = useState<string>('claude');
   const [ollamaEndpoint, setOllamaEndpoint] = useState<string>('http://localhost:11434');
   const [ollamaModel, setOllamaModel] = useState<string>('gpt-oss:20b');
+
+  const [openaiBaseUrl, setOpenaiBaseUrl] = useState<string>('https://api.openai.com');
+  const [openaiModel, setOpenaiModel] = useState<string>('gpt-4.1-mini');
 
   const getLanguageFromExtension = (filename: string): string => {
     const ext = String(filename).split('.').pop()?.toLowerCase() || '';
@@ -91,6 +155,7 @@ export default function CodingCoach() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        // IMPORTANTE: adicionar headers oficiais (x-api-key e anthropic-version) via proxy/ENV em produção
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
@@ -163,25 +228,22 @@ export default function CodingCoach() {
     let responseText: string = extractText(data) || '';
 
     // If the model returned no textual response (empty `response` and no useful output),
-    // retry once asking for plain text (no format) — some Ollama versions/models return tokens/context only when format=json is used.
+    // retry once asking for plain text (no format)
     if (!responseText) {
       try {
         data = await doRequest({ useJsonFormat: false });
         console.debug('[Ollama] raw response (fallback text format):', data);
         responseText = extractText(data) || '';
       } catch (e) {
-        // keep original data for debugging
         console.warn('[Ollama] fallback request failed:', e);
       }
     }
 
-    // If still empty, surface the raw object so the caller/UI can debug
     if (!responseText) {
       console.warn('[Ollama] no textual response found, returning raw payload for inspection');
       return data;
     }
 
-    // Remove code fences and try to parse JSON if present, otherwise return text
     responseText = String(responseText).replace(/```json\n?/gi, '').replace(/```\n?/gi, '').trim();
 
     try {
@@ -189,9 +251,44 @@ export default function CodingCoach() {
     } catch (err) {
       const jsonMatch = responseText.match(/({[\s\S]*})/m);
       if (jsonMatch) {
-        try { return JSON.parse(jsonMatch[1]); } catch (e) { /* fallthrough */ }
+        try { return JSON.parse(jsonMatch[1]); } catch (e) { /* ignore */ }
       }
-      // If not JSON, return the raw text so the UI can show it
+      return responseText;
+    }
+  };
+
+  const analyzeWithOpenAI = async (prompt: string) => {
+    // Em DEV você pode usar VITE_OPENAI_API_KEY; em produção use um proxy no servidor
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // DEV ONLY
+    if (!apiKey) {
+      throw new Error('OPENAI API KEY ausente (defina VITE_OPENAI_API_KEY no .env para testes locais)');
+    }
+
+    const url = `${openaiBaseUrl.replace(/\/$/, '')}/v1/chat/completions`;
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: openaiModel, // ex.: "gpt-4.1-mini"
+        temperature: 0,
+        response_format: { type: 'json_object' }, // força JSON válido
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!resp.ok) throw new Error(`OpenAI request failed: ${resp.status}`);
+    const data = await resp.json();
+    let responseText = data?.choices?.[0]?.message?.content || '';
+    responseText = String(responseText).replace(/```json\n?/gi, '').replace(/```\n?/gi, '').trim();
+
+    try {
+      return JSON.parse(responseText);
+    } catch {
+      const m = responseText.match(/({[\s\S]*})/m);
+      if (m) { try { return JSON.parse(m[1]); } catch { /* ignore */ } }
       return responseText;
     }
   };
@@ -249,8 +346,10 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
       let result;
       if (aiProvider === 'claude') {
         result = await analyzeWithClaude(prompt);
-      } else {
+      } else if (aiProvider === 'ollama') {
         result = await analyzeWithOllama(prompt);
+      } else if (aiProvider === 'openai') {
+        result = await analyzeWithOpenAI(prompt);
       }
       setAnalysis(result);
     } catch (err) {
@@ -290,8 +389,17 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Code2 className="w-10 h-10 text-blue-500" />
+            <img
+              src="/oraculum_logo_icone.png"
+              alt="Oraculum Logo"
+              className="w-10 h-10"
+            />
             <h1 className="text-4xl font-bold">{t('appTitle')}</h1>
+            <img
+              src="/nascimento.png"
+              alt="Oraculum Logo"
+              className="w-12 h-12"
+            />
             <button
               onClick={() => setShowConfig(!showConfig)}
               className="ml-4 p-2 hover:bg-gray-800 rounded-lg transition-colors"
@@ -323,6 +431,7 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
                 >
                   <option value="claude">{t('claude')}</option>
                   <option value="ollama">{t('ollama')}</option>
+                  <option value="openai">{t('openai')}</option> 
                 </select>
               </div>
 
@@ -354,6 +463,39 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       Exemplos: mistral, codellama, deepseek-coder, llama2, phi
+                    </p>
+                  </div>
+                </>
+              )}
+
+              {aiProvider === 'openai' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      {t('openaiBaseUrl')}
+                    </label>
+                    <input
+                      type="text"
+                      value={openaiBaseUrl}
+                      onChange={(e) => setOpenaiBaseUrl(e.target.value)}
+                      placeholder="https://api.openai.com"
+                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      {t('openaiModel')}
+                    </label>
+                    <input
+                      type="text"
+                      value={openaiModel}
+                      onChange={(e) => setOpenaiModel(e.target.value)}
+                      placeholder="gpt-4.1, gpt-4.1-mini, o4-mini..."
+                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 focus:outline-none focus:border-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {t('openaiNote')}
                     </p>
                   </div>
                 </>
@@ -485,6 +627,8 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
             </div>
           </div>
         )}
+        {/* FOOTER */}
+        <Footer />
         
         {/* Loading Overlay */}
         {loading && (
@@ -494,7 +638,12 @@ NÃO inclua nenhum texto fora do objeto JSON. Responda TUDO em português brasil
               <h3 className="text-lg font-medium mb-2">{t('analyzingYourCode')}</h3>
               <p className="text-sm text-gray-400">{t('thisMayTakeAMoment')}</p>
               <p className="text-xs text-gray-500 mt-2">
-                Usando: {aiProvider === 'claude' ? 'Claude API' : `Ollama (${ollamaModel})`}
+                {/* inclui OpenAI no label */}
+                Usando: {aiProvider === 'claude'
+                  ? 'Claude API'
+                  : aiProvider === 'ollama'
+                    ? `Ollama (${ollamaModel})`
+                    : `OpenAI (${openaiModel})`}
               </p>
             </div>
           </div>

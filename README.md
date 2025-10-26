@@ -2,7 +2,7 @@
 
 ![Oraculum IA Banner](./docs/oraculum.png)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-GPL-blue.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Stack](https://img.shields.io/badge/stack-React%20%7C%20Vite%20%7C%20Tailwind-blueviolet)
 ![Node](https://img.shields.io/badge/node->=20.19.0-339933?logo=node.js)
@@ -161,7 +161,7 @@ Siga as diretrizes do `CONTRIBUTING.md` (lint, commit message, escopo por PR, et
 
 ## 📄 Licença
 
-Distribuído sob a licença **MIT**. Consulte `LICENSE` para detalhes.
+Distribuído sob a licença **GPL3**. Consulte `LICENSE` para detalhes.
 
 ## 👤 Autores
 
@@ -171,6 +171,9 @@ Distribuído sob a licença **MIT**. Consulte `LICENSE` para detalhes.
 
 - Comunidade **Ollama**
 - **Anthropic** (Claude)
+- **OpenAI** (GPT)
+- **SophiaMind** Produção e AI
+- **SophiaLabs** Infraestrutura
 - **Vite**, **React**, **TailwindCSS**, **lucide-react**
 - Todos os contribuidores e testers
 
