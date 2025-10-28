@@ -21,6 +21,8 @@
 - 🌐 **Suporte multilíngue** do app (pt-BR no momento)
 - 🧩 **Detecção básica de linguagem** pelo sufixo do arquivo (py, tsx, java, go, etc.)
 
+![uso Oraculum IA](./docs/oraculum.gif)
+
 ## 🧱 Stack e Arquitetura
 
 - **Frontend:** React + Vite + TailwindCSS
